@@ -36,6 +36,6 @@ public class UDPSystem {
     }
 
     private static void error() {
-        System.out.println("Error :: Usage :: java [base|super] [port]");
+        Utility.printErrorMessage("Usage :: java [base|super] [port]");
     }
 }

@@ -2,13 +2,13 @@ package src;
 
 public class Utility {
 
-    public Utility() {}
-
     private static final int MIN_PORT_NUMBER = 8080;
     private static final int MAX_PORT_NUMBER = 8099;
 
     public static final String BASE_NODE = "base";
     public static final String SUPER_NODE = "super";
+
+    public Utility() {}
 
     /**
      * This method checks if the specified port is available for use
@@ -21,5 +21,27 @@ public class Utility {
         } else {
             return true;
         }
+    }
+
+    public static void clearConsole() {
+        try {
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("linux") || os.contains("mac")) {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            } else if (os.contains("windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                for (int i = 0; i < 51; i++) {
+                    System.out.println();
+                }
+            }
+        } catch (Exception e) {
+            printErrorMessage("Failed to clear the console");
+        }
+    }
+
+    public static void printErrorMessage(String msg) {
+        System.out.println("Error :: " + msg);
     }
 }
