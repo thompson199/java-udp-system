@@ -5,6 +5,8 @@ public class Utility {
     private static final int MIN_PORT_NUMBER = 8080;
     private static final int MAX_PORT_NUMBER = 8099;
 
+    public static final int FIVE_SECOND_TIMEOUT = 5000;
+
     public static final String BASE_NODE = "base";
     public static final String SUPER_NODE = "super";
 

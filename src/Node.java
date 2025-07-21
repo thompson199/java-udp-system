@@ -9,19 +9,21 @@ import java.util.UUID;
 
 public class Node {
 
-    private static String node_type;
+    private static InetAddress node_ip_address;
     private static int node_port;
+
+    private static String node_type;
     private static boolean is_super_node;
 
-    private static InetAddress node_ip_address;
     private static UUID node_uid;
 
     public Node(String type, int port_num) {
-        node_type = type;
+        node_ip_address = getLocalHostIP();
         node_port = port_num;
+
+        node_type = type;
         is_super_node = (node_type.equalsIgnoreCase(Utility.SUPER_NODE));
 
-        node_ip_address = getLocalHostIP();
         node_uid = UUID.randomUUID();
     }
 
@@ -77,7 +79,7 @@ public class Node {
         InetAddress ip = null;
 
         try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress("8.8.8.8", 53), 5000);
+            socket.connect(new InetSocketAddress("8.8.8.8", 53), Utility.FIVE_SECOND_TIMEOUT);
             ip = socket.getLocalAddress();
         } catch (IOException e) {
             try {
