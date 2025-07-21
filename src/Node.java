@@ -1,30 +1,28 @@
 package src;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.net.*;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class Node {
 
-    private static InetAddress node_ip_address;
-    private static int node_port;
+    private InetAddress node_ip_address;
+    private int node_port;
 
-    private static String node_type;
-    private static boolean is_super_node;
+    private String node_type;
+    private boolean is_super_node;
 
-    private static UUID node_uid;
+    private UUID node_uid;
 
-    public Node(String type, int port_num) {
-        node_ip_address = getLocalHostIP();
-        node_port = port_num;
+    public Node(String type, int port_num) throws IOException {
+        this.node_ip_address = getLocalHostIP();
+        this.node_port = port_num;
 
-        node_type = type;
-        is_super_node = (node_type.equalsIgnoreCase(Utility.SUPER_NODE));
+        this.node_type = type;
+        this.is_super_node = (node_type.equalsIgnoreCase(Utility.SUPER_NODE));
 
-        node_uid = UUID.randomUUID();
+        this.node_uid = UUID.randomUUID();
     }
 
     public void startupNode() {
@@ -66,16 +64,16 @@ public class Node {
         sc.close();
     }
 
-    private static void printNodeInfo() {
-        String type = "Node Type: " + node_type;
-        String port = "\nPort Number: " + node_port;
-        String sup = "\nIs Super: " + is_super_node;
-        String ip = "\nIP Address: " + node_ip_address;
+    private void printNodeInfo() {
+        String type = "Node Type: " + this.node_type;
+        String port = "\nPort Number: " + this.node_port;
+        String sup = "\nIs Super: " + this.is_super_node;
+        String ip = "\nIP Address: " + this.node_ip_address;
 
         System.out.println(type + port + sup + ip + "\n");
     }
 
-    private static InetAddress getLocalHostIP() {
+    private InetAddress getLocalHostIP() {
         InetAddress ip = null;
 
         try (Socket socket = new Socket()) {

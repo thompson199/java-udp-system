@@ -1,5 +1,7 @@
 package src;
 
+import java.io.IOException;
+
 public class UDPSystem {
 
     public static void main(String[] args) {
@@ -23,12 +25,19 @@ public class UDPSystem {
             return;
         }
 
-        if (
+        boolean valid_node_type =
             node_type.equalsIgnoreCase(Utility.BASE_NODE) ||
-            node_type.equalsIgnoreCase(Utility.SUPER_NODE)
-        ) {
-            Node node = new Node(node_type, port_num);
-            node.startupNode();
+            node_type.equalsIgnoreCase(Utility.SUPER_NODE);
+
+        if (valid_node_type) {
+            try {
+                Node node = new Node(node_type, port_num);
+                node.startupNode();
+            } catch (IOException e) {
+                Utility.printErrorMessage(
+                    "Failed to create " + node_type + "node on port " + port_num
+                );
+            }
         } else {
             error();
             return;
