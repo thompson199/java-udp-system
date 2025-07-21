@@ -1,5 +1,7 @@
 package src;
 
+import java.net.InetAddress;
+
 public class UserInterface {
 
     private static final String[] MAIN_MENU_OPTIONS = { "TBD", "Print Node Info", "Quit App" };
@@ -11,6 +13,11 @@ public class UserInterface {
             int pos = i + 1;
             System.out.print(pos + "." + options[i] + "\n");
         }
+    }
+
+    public static void printWelcomeMessage(int port, InetAddress ip) {
+        System.out.println("Welcome to the Java UDP App!");
+        System.out.println("Node started on port " + port + " with IP of " + ip);
     }
 
     public static void printMainMenuOptions() {

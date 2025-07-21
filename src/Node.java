@@ -15,6 +15,8 @@ public class Node {
 
     private UUID node_uid;
 
+    private ServerSocket server_sock;
+
     public Node(String type, int port_num) throws IOException {
         this.node_ip_address = getLocalHostIP();
         this.node_port = port_num;
@@ -23,14 +25,19 @@ public class Node {
         this.is_super_node = (node_type.equalsIgnoreCase(Utility.SUPER_NODE));
 
         this.node_uid = UUID.randomUUID();
+
+        this.server_sock = new ServerSocket(this.node_port);
     }
 
-    public void startupNode() {
+    public void startupNode() throws IOException {
         Scanner sc = new Scanner(System.in);
         boolean has_quit = false;
 
-        System.out.println("Welcome to the Java UDP App!");
+        UserInterface.printWelcomeMessage(node_port, node_ip_address);
+
         while (!has_quit) {
+            Socket client_sock = server_sock.accept();
+
             UserInterface.printMainMenuOptions();
             String input = sc.nextLine();
 
