@@ -18,6 +18,11 @@ public class UDPSystem {
             error();
         }
 
+        if (!Utility.isPortAvailable(port_num)) {
+            System.out.println("Specified port (" + port_num + ") is not available.");
+            return;
+        }
+
         if (
             node_type.equalsIgnoreCase(Utility.BASE_NODE) ||
             node_type.equalsIgnoreCase(Utility.SUPER_NODE)
