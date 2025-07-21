@@ -32,7 +32,7 @@ public class UDPSystem {
         if (valid_node_type) {
             try {
                 Node node = new Node(node_type, port_num);
-                node.startupNode();
+                node.start();
             } catch (IOException e) {
                 Utility.printErrorMessage(
                     "Failed to create " + node_type + "node on port " + port_num

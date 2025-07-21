@@ -4,7 +4,11 @@ import java.net.InetAddress;
 
 public class UserInterface {
 
-    private static final String[] MAIN_MENU_OPTIONS = { "TBD", "Print Node Info", "Quit App" };
+    private static final String[] MAIN_MENU_OPTIONS = {
+        "Ping Other Node",
+        "Print Node Info",
+        "Quit App",
+    };
 
     public UserInterface() {}
 

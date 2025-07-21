@@ -13,9 +13,8 @@ public class Node {
     private String node_type;
     private boolean is_super_node;
 
-    private UUID node_uid;
-
-    private ServerSocket server_sock;
+    private final UUID node_uid;
+    private DatagramSocket socket;
 
     public Node(String type, int port_num) throws IOException {
         this.node_ip_address = getLocalHostIP();
@@ -25,19 +24,18 @@ public class Node {
         this.is_super_node = (node_type.equalsIgnoreCase(Utility.SUPER_NODE));
 
         this.node_uid = UUID.randomUUID();
-
-        this.server_sock = new ServerSocket(this.node_port);
+        this.socket = new DatagramSocket(port_num);
     }
 
-    public void startupNode() throws IOException {
+    public void start() throws IOException {
         Scanner sc = new Scanner(System.in);
         boolean has_quit = false;
+
+        startListening();
 
         UserInterface.printWelcomeMessage(node_port, node_ip_address);
 
         while (!has_quit) {
-            Socket client_sock = server_sock.accept();
-
             UserInterface.printMainMenuOptions();
             String input = sc.nextLine();
 
@@ -53,14 +51,14 @@ public class Node {
 
             switch (choice) {
                 case 1:
-                    System.out.println("This functionality is still WIP");
+                    pingNode("127.0.0.1", 8081);
                     break;
                 case 2:
                     printNodeInfo();
                     break;
                 case 3:
-                    System.out.println("Quitting app");
                     has_quit = true;
+                    stopNode();
                     break;
                 default:
                     Utility.printErrorMessage("Number out of range for presented options");
@@ -71,6 +69,42 @@ public class Node {
         sc.close();
     }
 
+    public void startListening() {
+        Thread network_listener = new Thread(() -> {
+            byte[] buffer = new byte[1024];
+
+            try {
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
+
+                String receivedMessage = new String(packet.getData(), 0, packet.getLength());
+                String senderIP = packet.getAddress().getHostAddress();
+                int senderPort = packet.getPort();
+
+                System.out.println(
+                    "Received: " + receivedMessage + " from " + senderIP + ":" + senderPort
+                );
+            } catch (IOException e) {
+                Utility.printErrorMessage("Problem receiving message");
+            }
+        });
+
+        network_listener.setDaemon(true);
+        network_listener.start();
+    }
+
+    private void pingNode(String target_ip, int target_port) {
+        try {
+            byte[] buffer = ("PING").getBytes();
+            InetAddress address = InetAddress.getByName(target_ip);
+
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, target_port);
+            this.socket.send(packet);
+        } catch (IOException e) {
+            Utility.printErrorMessage("Failed to ping node on " + target_ip + ":" + target_port);
+        }
+    }
+
     private void printNodeInfo() {
         String type = "Node Type: " + this.node_type;
         String port = "\nPort Number: " + this.node_port;
@@ -78,6 +112,14 @@ public class Node {
         String ip = "\nIP Address: " + this.node_ip_address;
 
         System.out.println(type + port + sup + ip + "\n");
+    }
+
+    private void stopNode() {
+        if (this.socket != null && !socket.isClosed()) {
+            System.out.println("Stopping Node...");
+            this.socket.close();
+        }
+        System.out.println("Quitting app...");
     }
 
     private InetAddress getLocalHostIP() {
