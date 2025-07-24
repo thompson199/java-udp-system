@@ -7,6 +7,7 @@ import src.nodes.*;
 public class UDPSystem {
 
     public static void main(String[] args) {
+        // Handle arguments
         if (args.length < 2) {
             error();
             return;
@@ -23,26 +24,23 @@ public class UDPSystem {
         }
 
         if (!Utility.isPortAvailable(port_num)) {
-            System.out.println("Specified port (" + port_num + ") is not available.");
+            Utility.printErrorMessage("Port " + port_num + " is not available.");
             return;
         }
 
-        boolean valid_node_type =
-            node_type.equalsIgnoreCase(Utility.BASE_NODE) ||
-            node_type.equalsIgnoreCase(Utility.SUPER_NODE);
-
-        if (valid_node_type) {
-            try {
-                Node node = new Node(node_type, port_num);
+        // Create node
+        try {
+            if (node_type.equalsIgnoreCase(Utility.BASE_NODE)) {
+                BaseNode node = new BaseNode(node_type, port_num);
                 node.start();
-            } catch (IOException e) {
-                Utility.printErrorMessage(
-                    "Failed to create " + node_type + "node on port " + port_num
-                );
+            } else if (node_type.equalsIgnoreCase(Utility.SUPER_NODE)) {
+                SuperNode node = new SuperNode(node_type, port_num);
+                node.start();
+            } else {
+                error();
             }
-        } else {
-            error();
-            return;
+        } catch (IOException e) {
+            Utility.printErrorMessage("Failed to create " + node_type + "node on port " + port_num);
         }
     }
 

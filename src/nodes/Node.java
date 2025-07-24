@@ -6,13 +6,12 @@ import java.util.Scanner;
 import java.util.UUID;
 import src.common.*;
 
-public class Node {
+public abstract class Node {
 
     private InetAddress node_ip_address;
     private int node_port;
 
     private String node_type;
-    private boolean is_super_node;
 
     private final UUID node_uid;
     private DatagramSocket socket;
@@ -22,7 +21,6 @@ public class Node {
         this.node_port = port_num;
 
         this.node_type = type;
-        this.is_super_node = (node_type.equalsIgnoreCase(Utility.SUPER_NODE));
 
         this.node_uid = UUID.randomUUID();
         this.socket = new DatagramSocket(port_num);
@@ -109,10 +107,9 @@ public class Node {
     private void printNodeInfo() {
         String type = "Node Type: " + this.node_type;
         String port = "\nPort Number: " + this.node_port;
-        String sup = "\nIs Super: " + this.is_super_node;
         String ip = "\nIP Address: " + this.node_ip_address;
 
-        System.out.println(type + port + sup + ip + "\n");
+        System.out.println(type + port + ip + "\n");
     }
 
     private void stopNode() {
