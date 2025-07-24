@@ -31,10 +31,10 @@ public class UDPSystem {
         // Create node
         try {
             if (node_type.equalsIgnoreCase(Utility.BASE_NODE)) {
-                BaseNode node = new BaseNode(node_type, port_num);
+                BaseNode node = new BaseNode(port_num);
                 node.start();
             } else if (node_type.equalsIgnoreCase(Utility.SUPER_NODE)) {
-                SuperNode node = new SuperNode(node_type, port_num);
+                SuperNode node = new SuperNode(port_num);
                 node.start();
             } else {
                 error();

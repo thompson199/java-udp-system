@@ -8,19 +8,19 @@ import src.common.*;
 
 public abstract class Node {
 
-    private InetAddress node_ip_address;
-    private int node_port;
+    protected InetAddress node_ip_address;
+    protected int node_port;
 
-    private String node_type;
+    protected String node_type;
 
-    private final UUID node_uid;
-    private DatagramSocket socket;
+    protected final UUID node_uid;
+    protected DatagramSocket socket;
 
-    public Node(String type, int port_num) throws IOException {
-        this.node_ip_address = getLocalHostIP();
+    protected Thread network_listener;
+
+    public Node(int port_num) throws IOException {
         this.node_port = port_num;
-
-        this.node_type = type;
+        this.node_ip_address = getLocalHostIP();
 
         this.node_uid = UUID.randomUUID();
         this.socket = new DatagramSocket(port_num);
@@ -65,11 +65,12 @@ public abstract class Node {
             }
         }
 
+        this.network_listener.interrupt();
         sc.close();
     }
 
     public void startListening() {
-        Thread network_listener = new Thread(() -> {
+        this.network_listener = new Thread(() -> {
             byte[] buffer = new byte[1024];
 
             try {
@@ -88,11 +89,11 @@ public abstract class Node {
             }
         });
 
-        network_listener.setDaemon(true);
-        network_listener.start();
+        this.network_listener.setDaemon(true);
+        this.network_listener.start();
     }
 
-    private void pingNode(String target_ip, int target_port) {
+    protected void pingNode(String target_ip, int target_port) {
         try {
             byte[] buffer = ("PING").getBytes();
             InetAddress address = InetAddress.getByName(target_ip);
@@ -104,7 +105,7 @@ public abstract class Node {
         }
     }
 
-    private void printNodeInfo() {
+    protected void printNodeInfo() {
         String type = "Node Type: " + this.node_type;
         String port = "\nPort Number: " + this.node_port;
         String ip = "\nIP Address: " + this.node_ip_address;
@@ -112,7 +113,7 @@ public abstract class Node {
         System.out.println(type + port + ip + "\n");
     }
 
-    private void stopNode() {
+    protected void stopNode() {
         if (this.socket != null && !socket.isClosed()) {
             System.out.println("Stopping Node...");
             this.socket.close();
@@ -120,7 +121,7 @@ public abstract class Node {
         System.out.println("Quitting app...");
     }
 
-    private InetAddress getLocalHostIP() {
+    protected InetAddress getLocalHostIP() {
         InetAddress ip = null;
 
         try (Socket socket = new Socket()) {
