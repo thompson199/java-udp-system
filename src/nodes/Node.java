@@ -1,9 +1,10 @@
-package src;
+package src.nodes;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 import java.util.UUID;
+import src.common.*;
 
 public class Node {
 
