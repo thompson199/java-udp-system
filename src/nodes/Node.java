@@ -38,10 +38,9 @@ public abstract class Node {
             UserInterface.printMainMenuOptions();
             String input = sc.nextLine();
 
-            int choice = -1;
-            try {
-                choice = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
+            int choice = Utility.parseStringToInt(input);
+
+            if (choice == -1) {
                 Utility.printErrorMessage("Invalid number entered");
                 continue;
             }
@@ -115,10 +114,10 @@ public abstract class Node {
         while (!valid_node_info) {
             String[] node_info = askUserForNodeInfo();
 
-            // use regex to verify 1st elem of node info follows IP address format
+            // TODO: use regex to verify 1st elem of node info follows IP address format
             boolean valid_ip = true;
 
-            // parse 2nd elem of node info to integer for port number
+            // Evaluate port number
             target_port = Utility.parseStringToInt(node_info[1]);
             int length = node_info[1].length();
 
