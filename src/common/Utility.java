@@ -43,6 +43,18 @@ public class Utility {
         }
     }
 
+    public static int parseStringToInt(String text) {
+        int num = -1;
+
+        try {
+            num = Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            num = -1;
+        }
+
+        return num;
+    }
+
     public static void printErrorMessage(String msg) {
         System.out.println("Error :: " + msg);
     }

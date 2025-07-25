@@ -50,7 +50,7 @@ public abstract class Node {
 
             switch (choice) {
                 case 1:
-                    pingNode("127.0.0.1", 8081);
+                    handlePingNode();
                     break;
                 case 2:
                     printNodeInfo();
@@ -91,6 +91,43 @@ public abstract class Node {
 
         this.network_listener.setDaemon(true);
         this.network_listener.start();
+    }
+
+    protected String[] askUserForNodeInfo() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter an IP address: ");
+        String ip = sc.nextLine();
+
+        System.out.print("Enter a port number: ");
+        String port = sc.nextLine();
+
+        String[] node_info = { ip, port };
+
+        return node_info;
+    }
+
+    protected void handlePingNode() {
+        boolean valid_node_info = false;
+        String target_ip = null;
+        int target_port = -1;
+
+        while (!valid_node_info) {
+            String[] node_info = askUserForNodeInfo();
+
+            // use regex to verify 1st elem of node info follows IP address format
+            boolean valid_ip = true;
+
+            // parse 2nd elem of node info to integer for port number
+            target_port = Utility.parseStringToInt(node_info[1]);
+            int length = node_info[1].length();
+
+            boolean valid_port = (target_port != -1 && length == 4);
+
+            valid_node_info = (valid_ip && valid_port) ? true : false;
+        }
+
+        pingNode(target_ip, target_port);
     }
 
     protected void pingNode(String target_ip, int target_port) {
