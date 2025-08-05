@@ -1,10 +1,10 @@
-package src.nodes;
+package nodes;
 
+import common.*;
 import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 import java.util.UUID;
-import src.common.*;
 
 public abstract class Node {
 
@@ -17,6 +17,7 @@ public abstract class Node {
     protected DatagramSocket socket;
 
     protected Thread network_listener;
+    protected Scanner sc;
 
     public Node(int port_num) throws IOException {
         this.node_port = port_num;
@@ -27,7 +28,7 @@ public abstract class Node {
     }
 
     public void start() throws IOException {
-        Scanner sc = new Scanner(System.in);
+        this.sc = new Scanner(System.in);
         boolean has_quit = false;
 
         startListening();
@@ -36,7 +37,7 @@ public abstract class Node {
 
         while (!has_quit) {
             UserInterface.printMainMenuOptions();
-            String input = sc.nextLine();
+            String input = this.sc.nextLine();
 
             int choice = Utility.parseStringToInt(input);
 
@@ -65,7 +66,7 @@ public abstract class Node {
         }
 
         this.network_listener.interrupt();
-        sc.close();
+        this.sc.close();
     }
 
     public void startListening() {
@@ -93,13 +94,11 @@ public abstract class Node {
     }
 
     protected String[] askUserForNodeInfo() {
-        Scanner sc = new Scanner(System.in);
-
         System.out.print("Enter an IP address: ");
-        String ip = sc.nextLine();
+        String ip = this.sc.nextLine();
 
         System.out.print("Enter a port number: ");
-        String port = sc.nextLine();
+        String port = this.sc.nextLine();
 
         String[] node_info = { ip, port };
 

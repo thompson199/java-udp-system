@@ -13,7 +13,8 @@ if [ "$1" != "base" ] && [ "$1" != "super" ]; then
     exit 1
 fi
 
-javac src/UDPSystem.java
+# Compile all Java files (top level, UDP System and sub-packages like common and nodes)
+javac -cp src/main/java src/main/java/UDPSystem.java src/main/java/common/*.java src/main/java/nodes/*.java
 
-# Run UDP system with [base|super] and <port_number>
-java src.UDPSystem $1 $2
+# Run with correct classpath
+java -cp src/main/java UDPSystem $1 $2

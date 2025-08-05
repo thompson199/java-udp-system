@@ -1,8 +1,6 @@
-package src;
-
+import common.*;
 import java.io.IOException;
-import src.common.*;
-import src.nodes.*;
+import nodes.*;
 
 public class UDPSystem {
 

@@ -1,7 +1,9 @@
-package src.nodes;
+package nodes;
 
+import common.*;
 import java.io.IOException;
-import src.common.*;
+
+// import src.common.*;
 
 public class SuperNode extends Node {
 

@@ -1,7 +1,7 @@
-package src.nodes;
+package nodes;
 
+import common.*;
 import java.io.IOException;
-import src.common.*;
 
 public class BaseNode extends Node {
 
