@@ -113,13 +113,13 @@ public abstract class Node {
         while (!valid_node_info) {
             String[] node_info = askUserForNodeInfo();
 
-            // TODO: use regex to verify 1st elem of node info follows IP address format
-            boolean valid_ip = true;
+            // Evaluate IP address
+            target_ip = node_info[0];
+            boolean valid_ip = Utility.isValidIP(target_ip);
 
             // Evaluate port number
             target_port = Utility.parseStringToInt(node_info[1]);
             int length = node_info[1].length();
-
             boolean valid_port = (target_port != -1 && length == 4);
 
             valid_node_info = (valid_ip && valid_port) ? true : false;

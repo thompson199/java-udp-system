@@ -25,6 +25,39 @@ public class Utility {
         }
     }
 
+    /**
+     * This method takes the provided IP address, and verifies its format.
+     * Returns true or false to indicate validity of IP address.
+     *
+     * @param ip - string representing an IP address
+     * @return boolean indicating whether provided IP address is valid or not
+     */
+    public static boolean isValidIP(String ip) {
+        String[] parts = ip.split("\\.");
+        boolean valid_ip = false;
+
+        if (parts.length != 4) {
+            return false;
+        }
+
+        for (String s : parts) {
+            try {
+                int octet = Integer.parseInt(s);
+
+                if (0 <= octet && octet <= 255) {
+                    valid_ip = true;
+                    continue;
+                } else {
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+
+        return valid_ip;
+    }
+
     public static void clearConsole() {
         try {
             String os = System.getProperty("os.name").toLowerCase();
