@@ -105,12 +105,20 @@ public abstract class Node {
         return node_info;
     }
 
+    /**
+     * This method handles the functionality for pinging a node based on user input
+     * of IP address and port number.
+     *
+     * @param None
+     * @return None
+     */
     protected void handlePingNode() {
         boolean valid_node_info = false;
         String target_ip = null;
         int target_port = -1;
 
         while (!valid_node_info) {
+            System.out.println("Enter the information for the node that should be pinged.");
             String[] node_info = askUserForNodeInfo();
 
             // Evaluate IP address
@@ -122,9 +130,23 @@ public abstract class Node {
             int length = node_info[1].length();
             boolean valid_port = (target_port != -1 && length == 4);
 
+            // Print out corresponding messages if any of the provided node info is invalid
+            if (!valid_ip && !valid_port) {
+                Utility.clearConsole();
+                Utility.printErrorMessage("Both IP address and port number were invalid");
+            } else if (!valid_ip) {
+                Utility.clearConsole();
+                Utility.printErrorMessage("Invalid IP address entered :: format = xxx.xxx.xxx.xxx");
+            } else if (!valid_port) {
+                Utility.clearConsole();
+                Utility.printErrorMessage("Invalid port number entered");
+            }
+
             valid_node_info = (valid_ip && valid_port) ? true : false;
         }
 
+        Utility.clearConsole();
+        System.out.println("Sending a PING to " + target_ip + " on port " + target_port);
         pingNode(target_ip, target_port);
     }
 
