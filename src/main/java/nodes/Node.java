@@ -29,11 +29,17 @@ public abstract class Node {
 
     public void start() throws IOException {
         this.sc = new Scanner(System.in);
-        boolean has_quit = false;
-
         startNetworkListener();
 
         UserInterface.printWelcomeMessage(node_port, node_ip_address);
+        startUserInteraction();
+
+        this.network_listener.interrupt();
+        this.sc.close();
+    }
+
+    protected void startUserInteraction() {
+        boolean has_quit = false;
 
         while (!has_quit) {
             UserInterface.printMainMenuOptions();
@@ -64,9 +70,6 @@ public abstract class Node {
                     break;
             }
         }
-
-        this.network_listener.interrupt();
-        this.sc.close();
     }
 
     protected void startNetworkListener() {
