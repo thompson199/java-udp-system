@@ -19,6 +19,9 @@ Thumbs.db
 *.swp
 *.swo
 *~
+.classpath
+.project
+.settings/
 
 # Compiled class file
 *.class
