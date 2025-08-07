@@ -18,11 +18,7 @@ public class Utility {
      * @return boolean - indicates availability of port
      */
     public static boolean isPortAvailable(int port_num) {
-        if (port_num < MIN_PORT_NUMBER || port_num > MAX_PORT_NUMBER) {
-            throw new IllegalArgumentException("Error :: Invalid port given :: " + port_num);
-        } else {
-            return true;
-        }
+        return (MIN_PORT_NUMBER < port_num && port_num < MAX_PORT_NUMBER);
     }
 
     /**

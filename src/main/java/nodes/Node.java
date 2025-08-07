@@ -31,7 +31,7 @@ public abstract class Node {
         this.sc = new Scanner(System.in);
         boolean has_quit = false;
 
-        startListening();
+        startNetworkListener();
 
         UserInterface.printWelcomeMessage(node_port, node_ip_address);
 
@@ -69,7 +69,7 @@ public abstract class Node {
         this.sc.close();
     }
 
-    public void startListening() {
+    protected void startNetworkListener() {
         this.network_listener = new Thread(() -> {
             byte[] buffer = new byte[1024];
 
