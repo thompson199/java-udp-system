@@ -31,6 +31,7 @@ public abstract class Node {
         this.sc = new Scanner(System.in);
         startNetworkListener();
 
+        UserInterface.printTitle();
         UserInterface.printWelcomeMessage(node_port, node_ip_address);
         startUserInteraction();
 
@@ -59,7 +60,11 @@ public abstract class Node {
                     handlePingNode();
                     break;
                 case 2:
-                    printNodeInfo();
+                    UserInterface.printNodeInfo(
+                        this.node_type,
+                        this.node_port,
+                        this.node_ip_address
+                    );
                     break;
                 case 3:
                     has_quit = true;
@@ -121,7 +126,10 @@ public abstract class Node {
         int target_port = -1;
 
         while (!valid_node_info) {
-            System.out.println("Enter the information for the node that should be pinged.");
+            UserInterface.printHeading(
+                "Enter the information for the node that should be pinged.",
+                true
+            );
             String[] node_info = askUserForNodeInfo();
 
             // Evaluate IP address
@@ -149,7 +157,10 @@ public abstract class Node {
         }
 
         Utility.clearConsole();
-        System.out.println("Sending a PING to " + target_ip + " on port " + target_port);
+        UserInterface.printHeading(
+            "Sending a PING to " + target_ip + " on port " + target_port,
+            false
+        );
         pingNode(target_ip, target_port);
     }
 
@@ -165,20 +176,12 @@ public abstract class Node {
         }
     }
 
-    protected void printNodeInfo() {
-        String type = "Node Type: " + this.node_type;
-        String port = "\nPort Number: " + this.node_port;
-        String ip = "\nIP Address: " + this.node_ip_address;
-
-        System.out.println(type + port + ip + "\n");
-    }
-
     protected void stopNode() {
         if (this.socket != null && !socket.isClosed()) {
-            System.out.println("Stopping Node...");
+            UserInterface.printHeading("Stopping Node...", false);
             this.socket.close();
         }
-        System.out.println("Quitting app...");
+        UserInterface.printHeading("Quitting app...", true);
     }
 
     protected InetAddress getLocalHostIP() {
