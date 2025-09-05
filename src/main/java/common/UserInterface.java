@@ -24,12 +24,27 @@ public class UserInterface {
         "Quit App",
     };
 
+    /**
+     * Default constructor for UserInterface.
+     */
     public UserInterface() {}
 
+    /**
+     * Creates a string containing the specified number of space characters.
+     *
+     * @param count The number of spaces to repeat
+     * @return A string containing the specified number of spaces
+     */
     private static String repeatSpaces(int count) {
         return (" ").repeat(count);
     }
 
+    /**
+     * Prints a line of text centered within the defined maximum width boundaries.
+     * The text is padded with spaces on both sides and enclosed with vertical line borders.
+     *
+     * @param content The text content to be printed in the center of the line
+     */
     private static void printLineToCentre(String content) {
         int content_len = content.length();
         int total_padding = (content_len < MAX_WIDTH) ? MAX_WIDTH - content_len : 0;
@@ -46,6 +61,12 @@ public class UserInterface {
         System.out.println(left_side + content + right_side);
     }
 
+    /**
+     * Prints a line of text aligned to the left with proper indentation and padding.
+     * The text is indented from the left border and padded to maintain consistent line width.
+     *
+     * @param content The text content to be printed on the left side with indentation
+     */
     private static void printLineToLeft(String content) {
         int content_len = content.length();
 
@@ -56,6 +77,12 @@ public class UserInterface {
         System.out.println(VERT_LINE + INDENT + content + right_side);
     }
 
+    /**
+     * Prints a numbered list of menu options.
+     * Each option is displayed with a number prefix (starting from 1) and left-aligned formatting.
+     *
+     * @param options An array of strings representing the menu options to display
+     */
     private static void printOptions(String[] options) {
         for (int i = 0; i < options.length; i++) {
             int pos = i + 1;
@@ -63,12 +90,23 @@ public class UserInterface {
         }
     }
 
+    /**
+     * Prints the main title banner for the UDP System application.
+     * Displays the ASCII art title surrounded by horizontal border lines.
+     */
     public static void printTitle() {
         System.out.println(HORIZ_LINE);
         System.out.println(UDP_SYSTEM_TITLE);
         System.out.println(HORIZ_LINE);
     }
 
+    /**
+     * Prints a formatted heading with optional bottom border line.
+     * The heading text is centered and surrounded by horizontal lines.
+     *
+     * @param content The heading text to display
+     * @param print_bottom_line Whether to print a horizontal line below the heading
+     */
     public static void printHeading(String content, boolean print_bottom_line) {
         System.out.println(HORIZ_LINE);
         printLineToCentre(content);
@@ -78,11 +116,22 @@ public class UserInterface {
         }
     }
 
+    /**
+     * Prints a welcome message displaying the application name and node connection details.
+     * Shows the port number and IP address the node is running on.
+     *
+     * @param port The port number the node is listening on
+     * @param ip The IP address of the node
+     */
     public static void printWelcomeMessage(int port, InetAddress ip) {
         printLineToCentre("Welcome to the Java UDP App!");
         printLineToCentre("Node started on port " + port + " with IP of " + ip);
     }
 
+    /**
+     * Displays the main menu with available options and prompts for user input.
+     * Shows numbered menu options and waits for user selection.
+     */
     public static void printMainMenuOptions() {
         System.out.println(HORIZ_LINE);
         printLineToCentre("Select an action by entering the corresponding number");
@@ -94,6 +143,14 @@ public class UserInterface {
         System.out.print("Choice: ");
     }
 
+    /**
+     * Displays detailed information about the current node.
+     * Shows the node type, port number, and IP address in a formatted layout.
+     *
+     * @param type The type/role of the node (e.g., "Client", "Server")
+     * @param port The port number the node is using
+     * @param ip The IP address of the node
+     */
     public static void printNodeInfo(String type, int port, InetAddress ip) {
         System.out.println(HORIZ_LINE);
         printLineToCentre("Node Type: " + type);

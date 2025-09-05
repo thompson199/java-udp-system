@@ -19,6 +19,14 @@ public abstract class Node {
     protected Thread network_listener;
     protected Scanner sc;
 
+    /**
+     * Constructor for Node class.
+     * Initializes the node with a specified port number, generates a unique ID,
+     * and creates a DatagramSocket for network communication.
+     *
+     * @param port_num the port number for this node to bind to
+     * @throws IOException if socket creation fails
+     */
     public Node(int port_num) throws IOException {
         this.node_port = port_num;
         this.node_ip_address = getLocalHostIP();
@@ -27,6 +35,12 @@ public abstract class Node {
         this.socket = new DatagramSocket(port_num);
     }
 
+    /**
+     * Starts the node by initializing the user interface, network listener,
+     * and user interaction loop. This is the main entry point for node operation.
+     *
+     * @throws IOException if network operations fail
+     */
     public void start() throws IOException {
         this.sc = new Scanner(System.in);
         startNetworkListener();
@@ -39,6 +53,10 @@ public abstract class Node {
         this.sc.close();
     }
 
+    /**
+     * Handles the main user interaction loop, displaying menu options
+     * and processing user input until the user chooses to quit.
+     */
     protected void startUserInteraction() {
         boolean has_quit = false;
 
@@ -77,6 +95,11 @@ public abstract class Node {
         }
     }
 
+    /**
+     * Starts a daemon thread to listen for incoming network messages.
+     * The listener receives UDP packets and prints received messages
+     * along with sender information.
+     */
     protected void startNetworkListener() {
         this.network_listener = new Thread(() -> {
             byte[] buffer = new byte[1024];
@@ -101,6 +124,11 @@ public abstract class Node {
         this.network_listener.start();
     }
 
+    /**
+     * Prompts the user to enter IP address and port number for a target node.
+     *
+     * @return String array containing IP address and port number as strings
+     */
     protected String[] askUserForNodeInfo() {
         System.out.print("Enter an IP address: ");
         String ip = this.sc.nextLine();
@@ -164,6 +192,12 @@ public abstract class Node {
         pingNode(target_ip, target_port);
     }
 
+    /**
+     * Sends a PING message to the specified target node.
+     *
+     * @param target_ip the IP address of the target node
+     * @param target_port the port number of the target node
+     */
     protected void pingNode(String target_ip, int target_port) {
         try {
             byte[] buffer = ("PING").getBytes();
@@ -176,6 +210,9 @@ public abstract class Node {
         }
     }
 
+    /**
+     * Stops the node by closing the socket and displaying shutdown messages.
+     */
     protected void stopNode() {
         if (this.socket != null && !socket.isClosed()) {
             UserInterface.printHeading("Stopping Node...", false);
@@ -184,6 +221,12 @@ public abstract class Node {
         UserInterface.printHeading("Quitting app...", true);
     }
 
+    /**
+     * Determines the local host IP address by attempting to connect to an external server.
+     * Falls back to InetAddress.getLocalHost() if the primary method fails.
+     *
+     * @return InetAddress representing the local host IP, or null if both methods fail
+     */
     protected InetAddress getLocalHostIP() {
         InetAddress ip = null;
 

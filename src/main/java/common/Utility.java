@@ -54,6 +54,11 @@ public class Utility {
         return valid_ip;
     }
 
+    /**
+     * Clears the console screen based on the operating system.
+     * Uses appropriate system commands for Linux/Mac (clear) or Windows (cls).
+     * If the OS is not recognized or clearing fails, prints 50 blank lines as fallback.
+     */
     public static void clearConsole() {
         try {
             String os = System.getProperty("os.name").toLowerCase();
@@ -63,7 +68,7 @@ public class Utility {
             } else if (os.contains("windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
-                for (int i = 0; i < 51; i++) {
+                for (int i = 0; i < 50; i++) {
                     System.out.println();
                 }
             }
@@ -72,6 +77,12 @@ public class Utility {
         }
     }
 
+    /**
+     * Parses a string to an integer with error handling.
+     *
+     * @param text the string to be parsed as an integer
+     * @return the parsed integer value, or -1 if parsing fails
+     */
     public static int parseStringToInt(String text) {
         int num = -1;
 
@@ -84,6 +95,11 @@ public class Utility {
         return num;
     }
 
+    /**
+     * Prints an error message to the console with "Error ::" prefix.
+     *
+     * @param msg the error message to display
+     */
     public static void printErrorMessage(String msg) {
         System.out.println("Error :: " + msg);
     }
