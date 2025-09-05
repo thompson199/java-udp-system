@@ -3,6 +3,7 @@ package nodes;
 import common.*;
 import java.io.IOException;
 import java.net.*;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -12,6 +13,8 @@ public abstract class Node {
     protected int node_port;
 
     protected String node_type;
+
+    protected LinkedList<String> message_history;
 
     protected final UUID node_uid;
     protected DatagramSocket socket;
@@ -30,6 +33,8 @@ public abstract class Node {
     public Node(int port_num) throws IOException {
         this.node_port = port_num;
         this.node_ip_address = getLocalHostIP();
+
+        this.message_history = new LinkedList<String>();
 
         this.node_uid = UUID.randomUUID();
         this.socket = new DatagramSocket(port_num);
@@ -78,13 +83,16 @@ public abstract class Node {
                     handlePingNode();
                     break;
                 case 2:
+                    UserInterface.printList(this.message_history);
+                    break;
+                case 3:
                     UserInterface.printNodeInfo(
                         this.node_type,
                         this.node_port,
                         this.node_ip_address
                     );
                     break;
-                case 3:
+                case 4:
                     has_quit = true;
                     stopNode();
                     break;
@@ -104,19 +112,28 @@ public abstract class Node {
         this.network_listener = new Thread(() -> {
             byte[] buffer = new byte[1024];
 
-            try {
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                socket.receive(packet);
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                    socket.receive(packet);
 
-                String receivedMessage = new String(packet.getData(), 0, packet.getLength());
-                String senderIP = packet.getAddress().getHostAddress();
-                int senderPort = packet.getPort();
+                    String receivedMessage = new String(packet.getData(), 0, packet.getLength());
+                    String senderIP = packet.getAddress().getHostAddress();
+                    int senderPort = packet.getPort();
 
-                System.out.println(
-                    "Received: " + receivedMessage + " from " + senderIP + ":" + senderPort
-                );
-            } catch (IOException e) {
-                Utility.printErrorMessage("Problem receiving message");
+                    String msg =
+                        "Received: " + receivedMessage + " from " + senderIP + ":" + senderPort;
+                    this.message_history.add(msg);
+                } catch (SocketException e) {
+                    // Socket was closed, exit gracefully
+                    if (socket.isClosed()) {
+                        break;
+                    }
+                } catch (IOException e) {
+                    if (!Thread.currentThread().isInterrupted()) {
+                        Utility.printErrorMessage("Problem receiving message");
+                    }
+                }
             }
         });
 

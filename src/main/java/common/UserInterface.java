@@ -1,6 +1,7 @@
 package common;
 
 import java.net.InetAddress;
+import java.util.LinkedList;
 
 public class UserInterface {
 
@@ -20,6 +21,7 @@ public class UserInterface {
 
     private static final String[] MAIN_MENU_OPTIONS = {
         "Ping Other Node",
+        "View Message History",
         "Print Node Info",
         "Quit App",
     };
@@ -87,6 +89,27 @@ public class UserInterface {
         for (int i = 0; i < options.length; i++) {
             int pos = i + 1;
             printLineToLeft(pos + "." + options[i]);
+        }
+    }
+
+    /**
+     * Prints the items contained within the provided LinkedList.
+     * If the list is empty, simply prints a line with no content.
+     *
+     * @param list - A LinkedList of Strings that will be printed
+     */
+    public static void printList(LinkedList<String> list) {
+        System.out.println(HORIZ_LINE);
+
+        // If the list is empty, just print line with no content
+        // This creates a separation between the horizontal (=) lines above/below
+        if (list.size() == 0) {
+            printLineToCentre("");
+            return;
+        }
+
+        for (String str : list) {
+            printLineToLeft(str);
         }
     }
 
